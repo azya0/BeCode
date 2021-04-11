@@ -11,5 +11,5 @@ blueprint = flask.Blueprint(
 
 @blueprint.route('/')
 def main_page():
-    return flask.render_template("main.html")
+    return flask.render_template("header.html")
 
