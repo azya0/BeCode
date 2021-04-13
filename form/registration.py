@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Логин', [validators.Length(min=4, max=25)])
+    username = StringField('Логин', [validators.Length(min=5, max=25)])
     email = StringField('Email', [validators.Email()])
     password = PasswordField('Пароль', [
         validators.DataRequired(),
@@ -12,3 +12,4 @@ class RegistrationForm(FlaskForm):
     ])
     confirm = PasswordField('Повторите пароль')
     submit = SubmitField('Зарегестрироваться')
+    remember_me = BooleanField('Запомнить меня')

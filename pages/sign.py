@@ -2,6 +2,7 @@ import flask
 
 from data import db_session
 from form.registration import RegistrationForm
+from form.login import LoginForm
 
 blueprint = flask.Blueprint(
     'sign',
@@ -19,7 +20,10 @@ def register():
     return flask.render_template('signin.html', title='Registration', form=form)
 
 
-@blueprint.route('/login')
-@blueprint.route('/login/')
+@blueprint.route('/login', methods=['GET', 'POST'])
+@blueprint.route('/login/', methods=['GET', 'POST'])
 def login():
-    return "log_page"
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/success')
+    return flask.render_template('signup.html', title='Login', form=form)
