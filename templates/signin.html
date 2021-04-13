@@ -8,7 +8,7 @@
             <p class="mb-0">
                 {{ form.username(class="form-control", placeholder="Логин") }}<br>
                 {% for error in form.username.errors %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger becode_alert" role="alert">
                 {{ error }}
             </div>
             {% endfor %}
@@ -16,7 +16,7 @@
             <p class="mb-0">
                 {{ form.email(class="form-control", placeholder="Email") }}<br>
                 {% for error in form.email.errors %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger becode_alert" role="alert">
                 {{ error }}
             </div>
             {% endfor %}
@@ -24,7 +24,7 @@
             <p class="mb-0">
                 {{ form.password(class="form-control", type="password", placeholder="Пароль") }}<br>
                 {% for error in form.password.errors %}
-            <div class="alert alert-danger " role="alert">
+            <div class="alert alert-danger becode_alert" role="alert">
                 {{ error }}
             </div>
             {% endfor %}
@@ -32,7 +32,7 @@
             <p class="mb-0">
                 {{ form.confirm(class="form-control", type="password", placeholder="Повторите пароль") }}<br>
                 {% for error in form.confirm.errors %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger becode_alert" role="alert">
                 {{ error }}
             </div>
             {% endfor %}
