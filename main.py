@@ -3,7 +3,7 @@ from data import db_session
 from pages import main_page, sign
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = '#1000-7?vrDEFG22WEwefgRSDGf1243_zxc?'
 
 
