@@ -37,7 +37,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        session = db_session.create_session()  # Создание сессии.
+        user = session.query(User).filter(User.login == form.username.data).first()
+        if user is None:  # Если пользователя с подобный логином нет.
+            return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form, exception='Wrong login')
+        if check_password_hash(user.hashed_password, form.password.data):  # Проверка пароля.
+            login_user(user, remember=form.remember_me.data)  # Вход.
+            return redirect("/")  # Перенаправление на главную страницу.
+        return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form, exception='Wrong password')
     return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form)
 
 
