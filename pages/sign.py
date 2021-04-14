@@ -1,4 +1,5 @@
 import flask
+from werkzeug.utils import redirect
 
 from data import db_session
 from form.registration import RegistrationForm
@@ -17,7 +18,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         return redirect('/success')
-    return flask.render_template('signin.html', title='Registration', form=form)
+    return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Registration', form=form)
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
@@ -26,4 +27,4 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         return redirect('/success')
-    return flask.render_template('signup.html', title='Login', form=form)
+    return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form)

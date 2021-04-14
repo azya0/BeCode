@@ -12,5 +12,10 @@ blueprint = flask.Blueprint(
 
 @blueprint.route('/')
 def main_page():
-    return flask.render_template("main.html", title='')
+    return flask.render_template("main.html", title='BeCode', postfix='')
 
+
+@blueprint.route('/courses', methods=['GET'])
+@blueprint.route('/courses/', methods=['GET'])
+def main_page():
+    return flask.render_template("main.html", title='BeCode', postfix='Courses')

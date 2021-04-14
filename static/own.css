@@ -9,3 +9,9 @@
     font-size: 1.2rem;
     color: #ffffff;
 }
+
+.becode_nav-link {
+    border-style: solid;
+    text-align: center;
+    border-radius: 10px;
+}
