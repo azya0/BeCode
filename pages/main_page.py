@@ -17,5 +17,5 @@ def main_page():
 
 @blueprint.route('/courses', methods=['GET'])
 @blueprint.route('/courses/', methods=['GET'])
-def main_page():
+def courses():
     return flask.render_template("main.html", title='BeCode', postfix='Courses')

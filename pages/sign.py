@@ -3,7 +3,10 @@ from werkzeug.utils import redirect
 
 from data import db_session
 from form.registration import RegistrationForm
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, logout_user, current_user, LoginManager, login_required
 from form.login import LoginForm
+from classes.user import User
 
 blueprint = flask.Blueprint(
     'sign',
@@ -17,7 +20,15 @@ blueprint = flask.Blueprint(
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        session = db_session.create_session()
+        user = User()
+        user.login, user.hashed_password, user.email = [form.username.data, generate_password_hash(form.password.data),
+                                                        form.email.data]
+        session.add(user)
+        session.commit()
+        login_user(user)
+        print(f'{form.username.data} successful signed in')
+        return redirect('/')
     return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Registration', form=form)
 
 
@@ -28,3 +39,12 @@ def login():
     if form.validate_on_submit():
         return redirect('/success')
     return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form)
+
+
+@blueprint.route('/test/user/<int:user_id>', methods=['GET'])
+def get_user_id(user_id):
+    db_sess = db_session.create_session()
+    data = db_sess.query(User).get(user_id)
+    if data:
+        return flask.jsonify({'user': data.to_dict()})
+    return flask.jsonify({'error': 'missed id'})
