@@ -38,3 +38,25 @@
 .self-align {
    align-self: stretch;
 }
+
+.course-block {
+    text-align: center;
+    font-family: KoHo;
+    font-style: normal;
+    font-weight: normal;
+    font-weight: 500;
+    background-color: #67669A;
+    font-size: 3rem;
+    color: white;
+    border-radius: 25px;
+}
+
+.becode-a {
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.becode-a:hover {
+    text-decoration: none;
+   }

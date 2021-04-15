@@ -6,7 +6,7 @@ class Courses:
         self.courses = list(os.walk("courses"))[0][1]
 
     def get(self):
-        return sorted(self.courses)
+        return sorted(list(map(lambda x: x.capitalize(), self.courses)))
 
     @staticmethod
     def len_of_course(name_of_course):
@@ -17,6 +17,3 @@ class Courses:
             'name': name_of_course.capitalize(),
             'lessons': self.len_of_course(name_of_course)
         }
-
-test = Courses()
-print(test.course_data('python'))

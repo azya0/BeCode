@@ -1,0 +1,19 @@
+{% extends "header.html" %}
+
+{% block content %}
+    <div class="mt-5 container">
+        <div class="row">
+            {% for course in courses.get() %}
+                <div class="col-sm-6">
+                    <a href="/courses/{{ course }}" class="becode-a">
+                        <div class="course-block pt-3 mb-2 mx-2 my-1">
+                            <img src="{{ url_for('static', filename='images/courses/{0}'.format(course + '.png')) }}"
+                                         alt="error" size="100" height="100" width="100">
+                            <p>{{ course }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

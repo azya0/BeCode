@@ -1,4 +1,5 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
+from classes.courses import Courses
 import flask_login
 import flask
 
@@ -19,5 +20,7 @@ def main_page():
 
 @blueprint.route('/courses', methods=['GET'])
 @blueprint.route('/courses/', methods=['GET'])
+@login_required
 def courses():
-    return flask.render_template("main.html", title='BeCode', postfix='Courses', user=current_user)
+    return flask.render_template("courses.html", title='BeCode: Courses', postfix='Courses', user=current_user, courses=Courses())
+
