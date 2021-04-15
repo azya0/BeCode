@@ -32,7 +32,7 @@ def register():
         login_user(user)
         print(f'{form.username.data} successful signed in')
         return redirect('/')
-    return flask.render_template('signin.html', title='BeCode: SignIn',
+    return flask.render_template('SignUp.html', title='BeCode: SignUp',
                                  postfix='Registration', form=form, user=current_user)
 
 
@@ -46,14 +46,14 @@ def login():
         session = db_session.create_session()
         user = session.query(User).filter(User.login == form.username.data).first()
         if user is None:
-            return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login',
+            return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Login',
                                          form=form, exception='Wrong login', user=current_user)
         if check_password_hash(user.hashed_password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        return flask.render_template('signup.html', title='BeCode: SignUp', postfix='Login', form=form,
+        return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Login', form=form,
                                      exception='Wrong password', user=current_user)
-    return flask.render_template('signup.html', title='BeCode: SignUp',
+    return flask.render_template('signin.html', title='BeCode: SignIn',
                                  postfix='Login', form=form, user=current_user)
 
 
