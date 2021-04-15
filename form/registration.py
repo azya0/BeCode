@@ -12,4 +12,3 @@ class RegistrationForm(FlaskForm):
     ])
     confirm = PasswordField('Повторите пароль')
     submit = SubmitField('Зарегестрироваться')
-    remember_me = BooleanField('Запомнить меня')

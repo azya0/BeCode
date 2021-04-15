@@ -14,7 +14,6 @@ blueprint = flask.Blueprint(
 
 @blueprint.route('/')
 def main_page():
-    print(current_user)
     return flask.render_template("main.html", title='BeCode', postfix='', user=current_user)
 
 
