@@ -13,5 +13,6 @@ class User(SqlAlchemyBase, SerializerMixin, UserMixin):
     email = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     courses = sqlalchemy.Column(sqlalchemy.String, default='')
+    avatar = sqlalchemy.Column(sqlalchemy.String, default='images/default.png')
     banned = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     admin = sqlalchemy.Column(sqlalchemy.Boolean, default=False)

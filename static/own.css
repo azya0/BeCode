@@ -15,3 +15,26 @@
     text-align: center;
     border-radius: 10px;
 }
+
+.avatar {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1;
+    vertical-align: middle;
+    background-color: var(--color-avatar-bg);
+    border-radius: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px var(--color-avatar-border);
+}
+
+.avatar-user {
+    border-radius: 50%!important;
+}
+
+.avatar-1, .avatar-2, .avatar-small {
+    border-radius: 4px;
+}
+
+.self-align {
+   align-self: stretch;
+}

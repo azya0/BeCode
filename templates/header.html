@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
 </head>
 <body>
 <header>
@@ -30,12 +30,26 @@
                     <li class="nav-item">
                         <a href="" class="nav-link ml-2 my-2 py-1 becode_nav-link">Courses</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="" class="nav-link mr-0 d-md-flex ml-2 my-2 py-1 becode_nav-link">
+                                <img src="{{ url_for('static', filename='{0}'.format(user.avatar)) }}"
+                                     class="avatar-user avatar avatar-small" alt=""
+                                     size="20" height="24" width="25">
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/logout" class="nav-link ml-2 my-2 py-1 becode_nav-link">Logout</a>
+                        </li>
+                    {% else %}
                     <li class="nav-item">
                         <a href="http://127.0.0.1:5000//registration" class="nav-link ml-2 my-2 py-1 becode_nav-link">Sign in</a>
                     </li>
                     <li class="nav-item">
                         <a href="http://127.0.0.1:5000/login" class="nav-link ml-2 my-2 py-1 becode_nav-link">Sign up</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

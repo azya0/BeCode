@@ -7,6 +7,7 @@ from pages import main_page, sign
 
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = '#1000-7?vrDEFG22WEwefgRSDGf1243_zxc?'
+app.config["UPLOAD_FOLDER"] = "static/images"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -23,8 +24,8 @@ def not_found(error):
 
 
 def main():
-    db_session.global_init("db/courses.db")
     db_session.global_init("db/users.db")
+    db_session.global_init("db/courses.db")
     app.register_blueprint(main_page.blueprint)
     app.register_blueprint(sign.blueprint)
     app.run()
