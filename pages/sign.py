@@ -25,7 +25,7 @@ def register():
     if form.validate_on_submit():
         session = db_session.create_session()
         user = User()
-        user.login, user.hashed_password, user.email = [form.username.data, generate_password_hash(form.password.data),
+        user.login, user.hashed_password, user.email = [form.username.data, generate_password_hash(form.password.data.lower()),
                                                         form.email.data]
         session.add(user)
         session.commit()
@@ -48,7 +48,7 @@ def login():
         if user is None:
             return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Login',
                                          form=form, exception='Wrong login', user=current_user)
-        if check_password_hash(user.hashed_password, form.password.data):
+        if check_password_hash(user.hashed_password, form.password.data.lower()):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
         return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Login', form=form,
