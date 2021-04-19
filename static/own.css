@@ -9,13 +9,14 @@
     font-family: KoHo;
     font-style: normal;
     font-weight: normal;
-    border-color: #67669A;
+    border-color: #e40272;
     border-style: solid;
     border-width: 2px;
     font-size: 1.5rem;
-    color: #67669A;
+    color: #e40272;
     border-radius: 15px;
     background-color: white;
+    box-shadow: 0 0 5px #e40272;
 }
 
 .becode_nav-link {
@@ -69,6 +70,11 @@
     border-radius: 25px;
 }
 
+.course-block:hover {
+    background: #67669A;
+    color: white;
+}
+
 .becode-a {
     color: white;
     text-decoration: none;
@@ -78,3 +84,22 @@
 .becode-a:hover {
     text-decoration: none;
    }
+
+.becode-list {
+    text-align: center;
+    font-family: KoHo;
+    font-style: normal;
+    font-weight: normal;
+    font-weight: 500;
+    border-color: #67669A;
+    border-style: solid;
+    border-width: 2px;
+    font-size: 1.8rem;
+    color: #67669A;
+    border-radius: 10px;
+}
+
+.becode-shadow {
+    opacity: .5;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,16 @@
+{% extends "header.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        {% for lesson in topic.get() %}
+                <div class="col-sm-12">
+                    <a href="/courses/{{ postfix.lower() }}/{{ lesson.lower() }}" class="becode-a">
+                        <div class="row becode-list my-3">
+                            <div class="col-sm-11 text-left">{{ lesson }}</div>
+                            <div class="col-sm-1 becode-shadow pt-1">{{ topic.len(lesson) }}</div>
+                        </div>
+                    </a>
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}
