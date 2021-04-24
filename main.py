@@ -1,5 +1,5 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response, jsonify, render_template
 from classes.user import User
 from data import db_session
 from pages import main_page, sign
@@ -20,7 +20,12 @@ def load_user(user_id):
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': f'Not found: {error}'}), 404)
+    return render_template("error.html", title='BeCode: Error 404', postfix='Error 404', user=current_user), 404
+
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template("error.html", title='BeCode: Error 505', postfix='Error 505', user=current_user), 500
 
 
 def main():

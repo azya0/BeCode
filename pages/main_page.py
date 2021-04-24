@@ -26,6 +26,13 @@ def courses():
     return flask.render_template("courses.html", title='BeCode: Courses', postfix='Courses', user=current_user, courses=Courses())
 
 
+@blueprint.route('/profile', methods=['GET'])
+@blueprint.route('/profile/', methods=['GET'])
+@login_required
+def profile():
+    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user)
+
+
 @blueprint.route('/courses/<string:name>', methods=['GET'])
 @login_required
 def lesson(name: str):
