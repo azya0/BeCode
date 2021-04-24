@@ -32,7 +32,7 @@ def register():
         login_user(user)
         print(f'{form.username.data} successful signed in')
         return redirect('/')
-    return flask.render_template('SignUp.html', title='BeCode: SignUp',
+    return flask.render_template('signup.html', title='BeCode: SignUp',
                                  postfix='Registration', form=form, user=current_user)
 
 
