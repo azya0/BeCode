@@ -24,8 +24,8 @@ def not_found(error):
 
 
 @app.errorhandler(500)
-def not_found(error):
-    return render_template("error.html", title='BeCode: Error 505', postfix='Error 505', user=current_user), 500
+def internal_server_error(error):
+    return render_template("error.html", title='BeCode: Error 500', postfix='Error 500', user=current_user), 500
 
 
 def main():
