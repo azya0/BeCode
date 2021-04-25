@@ -103,3 +103,35 @@
     opacity: .5;
     font-size: 1.5rem;
 }
+
+.btn-primary {
+    border-radius: 0px !important;
+    background-color: #67669A;
+    border-color: #67669A;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+  box-shadow: none;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active  {
+  background-color: #53527A  !important;
+  border-color: #53527A !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: none;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+    background-color: #53527A !important;
+    border-color: #53527A !important;
+}

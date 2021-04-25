@@ -2,5 +2,25 @@
 
 {% block content %}
     <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="container" style="margin-top: 40%">
+                    <h1 style="font-size: 2rem">Become a</h1>
+                    <img src="/static/images/main/hackerman1.png" style="width: 50%">
+                    <h1 style="font-size: 2rem">With BeCode</h1>
+                    {% if user.is_authenticated %}
+                        <a href="/courses" class="btn btn-primary" role="button" style="width: 50%">Click here</a>
+                    {% else %}
+                        <a href="/login" class="btn btn-primary" role="button" style="width: 50%">Click here</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="container" style="display: grid;">
+                    <img src="/static/images/main/rectangle.png" style="margin-top: 28%;margin-left: 5%;">
+                    <img src="/static/images/main/hackerman2.png" style="margin-top: 23%; position: absolute;">
+                </div>
+            </div>
+         </div>
     </div>
 {% endblock %}

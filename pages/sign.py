@@ -31,7 +31,7 @@ def register():
         session.commit()
         login_user(user)
         print(f'{form.username.data} successful signed in')
-        return redirect('/')
+        return redirect('/courses')
     return flask.render_template('signup.html', title='BeCode: SignUp',
                                  postfix='Registration', form=form, user=current_user)
 
@@ -50,7 +50,7 @@ def login():
                                          form=form, exception='Wrong login', user=current_user)
         if check_password_hash(user.hashed_password, form.password.data.lower()):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/courses")
         return flask.render_template('signin.html', title='BeCode: SignIn', postfix='Login', form=form,
                                      exception='Wrong password', user=current_user)
     return flask.render_template('signin.html', title='BeCode: SignIn',
