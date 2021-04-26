@@ -56,6 +56,45 @@
     box-shadow: 0 0 5px #4b49ca;
 }
 
+.becode-font {
+    text-align: center;
+    font-family: KoHo;
+    font-size: 1.5rem;
+
+}
+
+.becode-content {
+    text-align: center;
+    font-family: KoHo;
+    border-color: #67669A;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 25px;
+}
+
+.becode-content-small {
+    font-size: 2rem;
+}
+
+.becode-btn {
+    background-color: #67669A;
+    border-color: #67669A;
+}
+
+.becode-btn:hover,
+.becode-btn:focus {
+    background-color: #67669A;
+    border-color: #67669A;
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active,
+.btn-secondary:not(:disabled):not(.disabled):active,
+.show>.btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #4c4b71;
+    border-color: #4c4b71;
+}
+
 .course-block {
     text-align: center;
     font-family: KoHo;

@@ -1,5 +1,6 @@
 import json
 import flask
+import sqlite3
 
 cats_dict = {
     'topic_name': 'Welcome to Python',
@@ -14,17 +15,29 @@ cats_dict = {
         'Змея.',
         'Я просто тестирую этот сайт, мне неинтересно.'
     ],
-    'right_answer': 'Язык программирования.'
+    'right_answer': 'Язык программирования.',
+    'passed': [],
 }
 
-with open('courses/python/1. Welcome to Python/task.json', 'w') as cat_file:
-    json.dump(cats_dict, cat_file)
+# with open('courses/python/1. Welcome to Python/task.json', 'w') as cat_file:
+#     json.dump(cats_dict, cat_file)
 
-from classes.courses import Courses
-name = 'python'
-lesson = 1
+# from classes.courses import Courses
+# name = 'python'
+# lesson = 1
+#
+#
+# with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
+#     data = json.loads(file.read())
+#     print(data)
+con = sqlite3.connect("db/users.db")
+cur = con.cursor()
+cur.execute(f'''
+                    UPDATE users
+                    SET score = score + 1
+                    WHERE id = 1
+                    ''')
 
-
-with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
-    data = json.loads(file.read())
-    print(data)
+# con = sqlite3.connect("db/users.db")
+# cur = con.cursor()
+print(cur.execute(f'''Select * from users''').fetchall())

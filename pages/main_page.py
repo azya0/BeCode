@@ -1,6 +1,7 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
 from classes.courses import Courses
 from classes.lesson import Lesson
+import sqlite3
 import flask
 import json
 
@@ -45,6 +46,26 @@ def lesson(name: str):
 def part(name: str, lesson: int):
     with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
         data = json.loads(file.read())
-    return flask.render_template("course_page.html", title=f'BeCode: {name.capitalize()}',
-                                 postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()),
-                                 lesson=lesson, data=data)
+    if flask.request.method == 'GET':
+        return flask.render_template("course_page.html", title=f'BeCode: {name.capitalize()}',
+                                     postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()),
+                                     lesson=lesson, data=data)
+    elif flask.request.method == 'POST':
+        user_answer = flask.request.form.getlist('answer')
+        if user_answer and user_answer[0] == data['right_answer']:
+            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
+                new_data = json.loads(file.read())
+                if current_user.id not in new_data['passed']:
+                    new_data['passed'] += [current_user.id]
+                    con = sqlite3.connect("db/users.db")
+                    cur = con.cursor()
+                    cur.execute(f'''
+                    UPDATE users
+                    SET score = score + 1
+                    WHERE id = {current_user.id}
+                    ''')
+            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json', 'w') as file:
+                json.dump(new_data, file)
+        return flask.render_template("course_page.html", title=f'BeCode: {name.capitalize()}',
+                                     postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()),
+                                     lesson=lesson, data=data)
