@@ -17,3 +17,7 @@ class Courses:
             'name': name_of_course.capitalize(),
             'lessons': self.len_of_course(name_of_course)
         }
+
+    @staticmethod
+    def get_list_of_courses(name_of_course):
+        return list(os.walk(f"courses/{name_of_course}"))[0][1]
