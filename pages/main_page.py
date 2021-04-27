@@ -28,8 +28,8 @@ def courses():
                                  courses=Courses())
 
 
-@blueprint.route('/profile', methods=['GET'])
-@blueprint.route('/profile/', methods=['GET'])
+@blueprint.route('/profile', methods=['GET', 'POST'])
+@blueprint.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
     return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user)
