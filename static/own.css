@@ -9,14 +9,14 @@
     font-family: KoHo;
     font-style: normal;
     font-weight: normal;
-    border-color: #e40272;
+    border-color: #8305f3;
     border-style: solid;
     border-width: 2px;
-    font-size: 1.5rem;
-    color: #e40272;
+    font-size: 1.2rem;
+    color: #8305f3;
     border-radius: 15px;
     background-color: white;
-    box-shadow: 0 0 5px #e40272;
+    box-shadow: 0 0 5px #8305f3;
 }
 
 .becode_nav-link {
