@@ -56,6 +56,7 @@ def part(name: str, lesson: int):
                   'data': data,
                   'user': current_user,
                   'passed': current_user.id in data['passed'],
+                  'wrong_answer': '',
                   **add}
         return data, kwargs
 
@@ -81,6 +82,9 @@ def part(name: str, lesson: int):
             with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json',
                       'w') as file:
                 json.dump(new_data, file)
+        elif user_answer and user_answer[0] != data['right_answer']:
+            kwargs['wrong_answer'] = user_answer[0]
+            return flask.render_template("course_page.html", **kwargs)
         else:
             print(f'{current_user.login} уже прошёл этот урок!')
         data, kwargs = get_kwargs()
