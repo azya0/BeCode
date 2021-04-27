@@ -214,3 +214,26 @@
     background-color: #53527A !important;
     border-color: #53527A !important;
 }
+
+.avatar_input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.avatar_btn:hover,
+.avatar_btn:focus,
+.avatar_btn:active  {
+  background-color: #67669A  !important;
+  border-color: #67669A !important;
+}
+
+.avatar_btn:not(:disabled):not(.disabled).active,
+.avatar_btn:not(:disabled):not(.disabled):active,
+.show > .avatar_btn.dropdown-toggle {
+    background-color: #67669A !important;
+    border-color: #67669A !important;
+}
