@@ -72,6 +72,11 @@
     border-radius: 25px;
 }
 
+.becode-content-passed {
+    border-color: #19ad3a;
+    box-shadow: 0 0 10px #19ad3a;
+}
+
 .becode-content-small {
     font-size: 2rem;
 }

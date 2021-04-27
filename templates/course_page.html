@@ -9,7 +9,7 @@
             <p>{{ data['context'] }}</p>
         </div>
         </div>
-        <div class="mt-5 py-3 px-3 becode-content">
+        <div class="mt-5 py-3 px-3 becode-content {% if passed %} becode-content-passed {% endif %}">
             <h2>{{ data['questions'] }}</h2>
             {% if data['type'] == 'question' %}
             <form action="" method="post" novalidate>

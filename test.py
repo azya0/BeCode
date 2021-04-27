@@ -40,4 +40,4 @@ cur.execute(f'''
 
 # con = sqlite3.connect("db/users.db")
 # cur = con.cursor()
-print(cur.execute(f'''Select * from users''').fetchall())
+print(cur.execute(f'''Select score from users''').fetchall())
