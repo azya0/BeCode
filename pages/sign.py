@@ -1,4 +1,4 @@
-from flask_login import login_user, logout_user, current_user, LoginManager, login_required
+from flask_login import login_user, logout_user, current_user, LoginManager, login_required, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from form.registration import RegistrationForm
 from werkzeug.utils import redirect
@@ -6,6 +6,7 @@ from form.login import LoginForm
 from classes.user import User
 from data import db_session
 from main import load_user
+import sqlite3
 import flask
 
 
@@ -19,10 +20,18 @@ blueprint = flask.Blueprint(
 @blueprint.route('/registration', methods=['GET', 'POST'])
 @blueprint.route('/registration/', methods=['GET', 'POST'])
 def register():
-    # if current_user:
-    #     return redirect('/')
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+        return redirect('/')
     form = RegistrationForm()
     if form.validate_on_submit():
+        con = sqlite3.connect('db/users.db')
+        cur = con.cursor()
+        if form.username.data in map(lambda x: x[0], cur.execute('''SELECT login FROM users''').fetchall()):
+            return flask.render_template('signup.html', title='BeCode: SignUp',
+                                         postfix='Registration', form=form, user=current_user, error_ex='Login already exist')
+        elif form.email.data in map(lambda x: x[0], cur.execute('''SELECT email FROM users''').fetchall()):
+            return flask.render_template('signup.html', title='BeCode: SignUp',
+                                         postfix='Registration', form=form, user=current_user, error_ex='Email already exist')
         session = db_session.create_session()
         user = User()
         user.login, user.hashed_password, user.email = [form.username.data, generate_password_hash(form.password.data.lower()),
@@ -33,7 +42,7 @@ def register():
         print(f'{form.username.data} successful signed in')
         return redirect('/courses')
     return flask.render_template('signup.html', title='BeCode: SignUp',
-                                 postfix='Registration', form=form, user=current_user)
+                                 postfix='Registration', form=form, user=current_user, error_ex='')
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])

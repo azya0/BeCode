@@ -37,6 +37,11 @@
             </div>
             {% endfor %}
             </p>
+            {% if error_ex %}
+            <div class="alert alert-danger becode_alert" role="alert">
+                {{ error_ex }}
+            </div>
+            {% endif %}
             <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         </form>
     </div>
