@@ -38,6 +38,10 @@ def profile():
 @blueprint.route('/courses/<string:name>', methods=['GET'])
 @login_required
 def lesson(name: str):
+    try:
+        Lesson(name.lower()).get()
+    except IndexError:
+        flask.abort(404)
     return flask.render_template("main_course_page.html", title=f'BeCode: {name.capitalize()}',
                                  postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()))
 
