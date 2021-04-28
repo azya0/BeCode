@@ -15,7 +15,7 @@
 			<input name="inp" id="inp" class="avatar_input" type="file" accept=".png">
 		</div>
 		<div class="col-sm lead line">
-			<figure class="mt-4">
+			<figure class="mt-3">
 				<blockquote class="blockquote">
 					<p>{{ current_user.login }}</p>
 				</blockquote>
@@ -29,6 +29,23 @@
 				<figcaption class="blockquote-footer">
 					E-mail пользователя
 				</figcaption>
+				<hr/>
+				<!-- <blockquote class="blockquote">
+					<p>{{ current_user.score }}</p>
+				</blockquote>
+				<figcaption class="blockquote-footer">
+					Количество очков пользователя
+				</figcaption> -->
+				<ul class="list-inline">
+					<li class="list-inline-item">
+						<p>{{ current_user.score }}</p>
+					</li>
+					<li class="list-inline-item">
+						<figcaption class="blockquote-footer">
+							Количество очков пользователя
+						</figcaption>
+					</li>
+				</ul>
 			</figure>
 		</div>
 	</div>
