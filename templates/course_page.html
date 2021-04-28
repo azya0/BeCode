@@ -1,9 +1,9 @@
 {% extends "header.html" %}
 
 {% block content %}
-    <div class="container row mt-3">
+    <div class="container row mt-3 justify-content-center">
         {% for elm in range(part) %}
-            <a href="{{ elm + 1 }}" class="col-sm-3 becode-part-block mx-auto"></a>
+            <a href="{{ elm + 1 }}" class="col-sm-1 becode-part-block mx-3"></a>
         {% endfor %}
     </div>
     <div class="mt-5 container">
@@ -18,7 +18,7 @@
             <h2>{{ data['questions'] }}</h2>
             {% if data['type'] == 'question' %}
             <form action="" method="post" novalidate>
-                <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                <div class="btn-group btn-group-toggle row becode-display" data-toggle="buttons">
                     {% for answer in data['answers'] %}
                   <label class="my-2 mx-5 btn {% if not passed %} btn-secondary {% endif %} becode-btn becode-font col-sm-12 {% if passed and answer == data['right_answer'] %} becode-btn-passed {% endif %} {% if answer == wrong_answer %} becode-btn-wrong {% endif %}">
                     <input type="radio" name="answer" value="{{ answer }}"> {{ answer }}

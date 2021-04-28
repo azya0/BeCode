@@ -2,6 +2,9 @@
     background-color: #67669A;
 }
 
+.becode-display {
+    display: flex;
+}
 
 .becode_alert {
     padding: 0;
