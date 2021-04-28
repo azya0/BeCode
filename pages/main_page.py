@@ -46,13 +46,14 @@ def lesson(name: str):
                                  postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()))
 
 
-@blueprint.route('/courses/<string:name>/<int:lesson>', methods=['GET', 'POST'])
+@blueprint.route('/courses/<string:name>/<int:lesson>/<int:part>', methods=['GET', 'POST'])
 @login_required
-def part(name: str, lesson: int):
+def part(name: str, lesson: int, part: int):
     def get_kwargs(**add):
         global data, kwargs
-        with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
+        with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
             data = json.loads(file.read())
+        current_lesson = Lesson(name.lower())
         kwargs = {'title': f'BeCode: {name.capitalize()}',
                   'postfix': name.capitalize(),
                   'topic': Lesson(name.lower()),
@@ -60,6 +61,7 @@ def part(name: str, lesson: int):
                   'data': data,
                   'user': current_user,
                   'passed': current_user.id in data['passed'],
+                  'part': len(current_lesson.list(current_lesson.get()[lesson - 1])),
                   'wrong_answer': '',
                   **add}
         return data, kwargs
@@ -70,7 +72,7 @@ def part(name: str, lesson: int):
     elif flask.request.method == 'POST':
         user_answer = flask.request.form.getlist('answer')
         if user_answer and user_answer[0] == data['right_answer']:
-            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json') as file:
+            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
                 new_data = json.loads(file.read())
                 if current_user.id not in new_data['passed']:
                     new_data['passed'] += [current_user.id]
@@ -83,7 +85,7 @@ def part(name: str, lesson: int):
                     ''')
                     con.commit()
                     con.close()
-            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/task.json',
+            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
                       'w') as file:
                 json.dump(new_data, file)
         elif user_answer and user_answer[0] != data['right_answer']:

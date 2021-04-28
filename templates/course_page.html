@@ -1,15 +1,20 @@
 {% extends "header.html" %}
 
 {% block content %}
+    <div class="container row mt-3">
+        {% for elm in range(part) %}
+            <a href="{{ elm + 1 }}" class="col-sm-3 becode-part-block mx-auto"></a>
+        {% endfor %}
+    </div>
     <div class="mt-5 container">
         <div class="becode-content">
         <h1>{{ data['topic_name'] }}</h1>
         <h2>{{ data['name'] }}</h2>
         <div class="mt-5 becode-content-small">
-            <p>{{ data['context'] }}</p>
+            <p class="mx-2">{{ data['context'] }}</p>
         </div>
         </div>
-        <div class="mt-5 py-3 px-3 becode-content {% if passed %} becode-content-passed {% endif %}">
+        <div class="my-5 py-3 px-3 becode-content {% if passed %} becode-content-passed {% endif %}">
             <h2>{{ data['questions'] }}</h2>
             {% if data['type'] == 'question' %}
             <form action="" method="post" novalidate>
