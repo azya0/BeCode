@@ -2,6 +2,7 @@ from flask_login import login_user, logout_user, current_user, LoginManager, log
 from classes.courses import Courses
 from classes.course import Course
 from classes.lesson import Lesson
+from classes.user import User
 import sqlite3
 import flask
 import json
@@ -21,6 +22,14 @@ def main_page():
     return flask.render_template("main.html", title='BeCode', postfix='', user=current_user)
 
 
+@blueprint.route("/top/")
+@blueprint.route("/top")
+def top():
+    session = db_session.create_session()
+    user_list = sorted(session.query(User).all(), key=lambda x: x.score, reverse=True)
+    return flask.render_template("top.html", title='Becode: Top', postfix='Top', users=enumerate(user_list), user=current_user)
+
+
 @blueprint.route('/courses', methods=['GET'])
 @blueprint.route('/courses/', methods=['GET'])
 @login_required
@@ -34,7 +43,7 @@ def courses():
 @login_required
 def profile():
     session = db_session.create_session()
-    courses = [session.query(Course).filter(Course.id == int(course_id)).all()[0] for course_id in current_user.courses.split(", ")]
+    courses = [session.query(Course).filter(Course.id == int(course_id)).all()[0] for course_id in current_user.courses.split(", ") if course_id.strip() != '']
     return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user, courses=courses)
 
 
