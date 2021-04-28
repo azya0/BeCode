@@ -10,7 +10,7 @@ class Courses:
 
     @staticmethod
     def len_of_course(name_of_course):
-        return len(list(os.walk(f"courses/{name_of_course}"))[0][2])
+        return len(list(os.walk(f"courses/{name_of_course.lower()}"))[0][2])
 
     def course_data(self, name_of_course):
         return {
@@ -20,4 +20,4 @@ class Courses:
 
     @staticmethod
     def get_list_of_courses(name_of_course):
-        return list(os.walk(f"courses/{name_of_course}"))[0][1]
+        return list(os.walk(f"courses/{name_of_course.lower()}"))[0][1]
