@@ -42,9 +42,7 @@ def courses():
 @blueprint.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
-    session = db_session.create_session()
-    courses = [session.query(Course).filter(Course.id == int(course_id)).all()[0] for course_id in current_user.courses.split(", ") if course_id.strip() != '']
-    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user, courses=courses)
+    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user, courses=current_user.courses.split(", "))
 
 
 @blueprint.route('/courses/<string:name>', methods=['GET'])
@@ -91,6 +89,13 @@ def part(name: str, lesson: int, part: int):
     if flask.request.method == 'GET':
         return flask.render_template("course_page.html", **kwargs)
     elif flask.request.method == 'POST':
+        print(current_user.courses.split(", "))
+        print(name)
+        if name not in current_user.courses.split(", "):
+            session = db_session.create_session()
+            curr = session.query(User).get(current_user.id)
+            curr.courses = ", ".join([i for i in curr.courses.split(", ") + [name] if i.strip() != ''])
+            session.commit()
         user_answer = flask.request.form.getlist('answer')
         if user_answer and user_answer[0] == data['right_answer']:
             with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
