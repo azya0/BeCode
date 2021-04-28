@@ -1,3 +1,5 @@
+from classes.courses import Courses
+import json
 import os
 
 
@@ -13,3 +15,9 @@ class Lesson:
 
     def len(self, lname):
         return len(list(os.walk(f"courses/{self.name}/{lname}"))[0][2])
+
+    @staticmethod
+    def passed_part(name, lesson, part, user_id):
+        with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
+            data = json.loads(file.read())
+        return user_id in data['passed']

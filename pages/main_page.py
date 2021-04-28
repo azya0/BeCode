@@ -42,8 +42,15 @@ def lesson(name: str):
         Lesson(name.lower()).get()
     except IndexError:
         flask.abort(404)
+    data = {
+        j: [Lesson.passed_part(name, int(j.split('.')[0]), i, current_user.id) for i in
+         range(1, len(Lesson(name.lower()).list(Lesson(name.lower()).get()[int(j.split('.')[0]) - 1])) + 1)]
+        for j in Lesson(name.lower()).get()
+    }
+    data = {i: round(data[i].count(True) / len(data[i]) * 100) for i in data}
     return flask.render_template("main_course_page.html", title=f'BeCode: {name.capitalize()}',
-                                 postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()))
+                                 postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()),
+                                 passed=data)
 
 
 @blueprint.route('/courses/<string:name>/<int:lesson>/<int:part>', methods=['GET', 'POST'])
@@ -62,6 +69,8 @@ def part(name: str, lesson: int, part: int):
                   'user': current_user,
                   'passed': current_user.id in data['passed'],
                   'part': len(current_lesson.list(current_lesson.get()[lesson - 1])),
+                  'cur_part': part,
+                  'passed_parts': [Lesson.passed_part(name, lesson, i, current_user.id) for i in range(1, len(current_lesson.list(current_lesson.get()[lesson - 1])) + 1)],
                   'wrong_answer': '',
                   **add}
         return data, kwargs

@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container mt-5">
         {% for lesson in topic.get() %}
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="background-image: linear-gradient(to right, rgb(0 255 37 / 14%) {{ passed[lesson] }}%, rgba(255, 255, 255, 0) {{ passed[lesson] }}%)">
                     <a href="/courses/{{ postfix.lower() }}/{{ lesson.lower().split('.')[0] }}/1" class="becode-a">
                         <div class="row becode-list my-3">
                             <div class="col-sm-11 text-left">{{ lesson }}</div>
