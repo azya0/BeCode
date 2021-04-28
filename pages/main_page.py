@@ -1,5 +1,6 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
 from classes.courses import Courses
+from classes.course import Course
 from classes.lesson import Lesson
 import sqlite3
 import flask
@@ -32,7 +33,9 @@ def courses():
 @blueprint.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user)
+    session = db_session.create_session()
+    courses = [session.query(Course).filter(Course.id == int(course_id)).all()[0] for course_id in current_user.courses.split(", ")]
+    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user, courses=courses)
 
 
 @blueprint.route('/courses/<string:name>', methods=['GET'])
