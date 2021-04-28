@@ -1,6 +1,8 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
 from classes.courses import Courses
+from classes.course import Course
 from classes.lesson import Lesson
+from classes.user import User
 import sqlite3
 import flask
 import json
@@ -20,6 +22,14 @@ def main_page():
     return flask.render_template("main.html", title='BeCode', postfix='', user=current_user)
 
 
+@blueprint.route("/top/")
+@blueprint.route("/top")
+def top():
+    session = db_session.create_session()
+    user_list = sorted(session.query(User).all(), key=lambda x: x.score, reverse=True)
+    return flask.render_template("top.html", title='Becode: Top', postfix='Top', users=enumerate(user_list), user=current_user)
+
+
 @blueprint.route('/courses', methods=['GET'])
 @blueprint.route('/courses/', methods=['GET'])
 @login_required
@@ -32,7 +42,7 @@ def courses():
 @blueprint.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user)
+    return flask.render_template("profile.html", title='BeCode: Profile', postfix='Profile', user=current_user, courses=current_user.courses.split(", "))
 
 
 @blueprint.route('/courses/<string:name>', methods=['GET'])
@@ -79,6 +89,13 @@ def part(name: str, lesson: int, part: int):
     if flask.request.method == 'GET':
         return flask.render_template("course_page.html", **kwargs)
     elif flask.request.method == 'POST':
+        print(current_user.courses.split(", "))
+        print(name)
+        if name not in current_user.courses.split(", "):
+            session = db_session.create_session()
+            curr = session.query(User).get(current_user.id)
+            curr.courses = ", ".join([i for i in curr.courses.split(", ") + [name] if i.strip() != ''])
+            session.commit()
         user_answer = flask.request.form.getlist('answer')
         if user_answer and user_answer[0] == data['right_answer']:
             with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:

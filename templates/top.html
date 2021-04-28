@@ -1,0 +1,25 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mt-3">
+	<h1 style="font-size: 5rem; font-weight: 300;">Текущий топ пользователей</h1>
+	<table class="table table-hover mt-3 justify-content-center text-center">
+		<thead>
+			<tr>
+				<th scope="col">Место</th>
+				<th scope="col">Никнейм</th>
+				<th scope="col">Рейтинг</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for person in users %}
+			<tr>
+				<th scope="row">{{ person[0] + 1 }}</th>
+				<td>{{ person[1].login }}</td>
+				<td>{{ person[1].score }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
