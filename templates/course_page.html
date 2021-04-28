@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container row mt-3 justify-content-center">
         {% for elm in range(part) %}
-            <a href="{{ elm + 1 }}" class="col-sm-1 {% if elm + 1 == cur_part %} becode-current-part-block {% endif %} {% if passed_parts[elm] %} becode-passed-part-block {% endif %} becode-part-block mx-3"></a>
+            <a href="{{ elm + 1 }}" class="col-sm-1 {% if elm + 1 == cur_part %} becode-current-part-block {% endif %} {% if passed_parts[elm] %} becode-passed-part-block {% endif %} becode-part-block mx-3 my-2"></a>
         {% endfor %}
     </div>
     <div class="mt-5 container">
@@ -31,8 +31,18 @@
                     {% endif %}
                 </div>
             </form>
-            {% else %}
-                <div>{{ number }} - нечётное</div>
+            {% elif data['type'] == 'label' %}
+                <div class="mx-5 py-2 becode-code">{{ data['task'] }}</div>
+                <form action="" method="post" novalidate>
+                        <div class="row mt-5">
+                            {% if not passed %}
+                        <input type="text" name='answer' class="mb-3 mx-5 form-control becode_shadow {% if wrong %} becode-shdow-wrong {% endif %}" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                        <input type="submit" class="mx-5 btn btn-primary btn-lg btn-block" value="Check">
+                            {% else %}
+                        <input type="text" name='answer' class="mb-3 mx-5 form-control becode_shadow becode-shadow-right" value="{{ data['right_answer'] }}" aria-label="" aria-describedby="basic-addon1">
+                            {% endif %}
+                    </div>
+                </form>
             {% endif %}
         </div>
     </div>

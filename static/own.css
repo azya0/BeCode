@@ -59,6 +59,35 @@
     box-shadow: 0 0 5px #4b49ca;
 }
 
+.becode-shadow-right {
+    background-color: #19ad3a61;
+    border-color: #19ad3a;
+}
+
+.becode-shadow-right:focus {
+    border-color: #19ad3a;
+    outline: 0;
+    box-shadow: 0 0 5px #19ad3a;
+}
+
+.becode-shdow-wrong {
+    background-color: #e09f9f80;
+    border-color: #bb2a2a;
+}
+
+.becode-shdow-wrong:focus {
+    border-color: #bb2a2a;
+    outline: 0;
+    box-shadow: 0 0 5px #bb2a2a;
+}
+
+.becode-code {
+    background-color: #252235;
+    color: #ae91ce;
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.2rem;
+}
+
 .becode-font {
     text-align: center;
     font-family: KoHo;

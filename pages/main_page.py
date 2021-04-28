@@ -82,6 +82,7 @@ def part(name: str, lesson: int, part: int):
                   'cur_part': part,
                   'passed_parts': [Lesson.passed_part(name, lesson, i, current_user.id) for i in range(1, len(current_lesson.list(current_lesson.get()[lesson - 1])) + 1)],
                   'wrong_answer': '',
+                  'wrong': False,
                   **add}
         return data, kwargs
 
@@ -96,28 +97,53 @@ def part(name: str, lesson: int, part: int):
             curr = session.query(User).get(current_user.id)
             curr.courses = ", ".join([i for i in curr.courses.split(", ") + [name] if i.strip() != ''])
             session.commit()
-        user_answer = flask.request.form.getlist('answer')
-        if user_answer and user_answer[0] == data['right_answer']:
-            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
-                new_data = json.loads(file.read())
-                if current_user.id not in new_data['passed']:
-                    new_data['passed'] += [current_user.id]
-                    con = sqlite3.connect("db/users.db")
-                    cur = con.cursor()
-                    cur.execute(f'''
-                    UPDATE users
-                    SET score = score + 1
-                    WHERE id = {current_user.id}
-                    ''')
-                    con.commit()
-                    con.close()
-            with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
-                      'w') as file:
-                json.dump(new_data, file)
-        elif user_answer and user_answer[0] != data['right_answer']:
-            kwargs['wrong_answer'] = user_answer[0]
+        if data['type'] == 'question':
+            user_answer = flask.request.form.getlist('answer')
+            if user_answer and user_answer[0] == data['right_answer']:
+                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
+                    new_data = json.loads(file.read())
+                    if current_user.id not in new_data['passed']:
+                        new_data['passed'] += [current_user.id]
+                        con = sqlite3.connect("db/users.db")
+                        cur = con.cursor()
+                        cur.execute(f'''
+                        UPDATE users
+                        SET score = score + 1
+                        WHERE id = {current_user.id}
+                        ''')
+                        con.commit()
+                        con.close()
+                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
+                          'w') as file:
+                    json.dump(new_data, file)
+            elif user_answer and user_answer[0] != data['right_answer']:
+                kwargs['wrong_answer'] = user_answer[0]
+                return flask.render_template("course_page.html", **kwargs)
+            else:
+                print(f'{current_user.login} уже прошёл этот урок!')
+            data, kwargs = get_kwargs()
             return flask.render_template("course_page.html", **kwargs)
         else:
-            print(f'{current_user.login} уже прошёл этот урок!')
-        data, kwargs = get_kwargs()
-        return flask.render_template("course_page.html", **kwargs)
+            user_answer = flask.request.form.get('answer')
+            if user_answer and user_answer == data['right_answer']:
+                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
+                    new_data = json.loads(file.read())
+                    if current_user.id not in new_data['passed']:
+                        new_data['passed'] += [current_user.id]
+                        con = sqlite3.connect("db/users.db")
+                        cur = con.cursor()
+                        cur.execute(f'''
+                        UPDATE users
+                        SET score = score + 1
+                        WHERE id = {current_user.id}
+                        ''')
+                        con.commit()
+                        con.close()
+                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
+                          'w') as file:
+                    json.dump(new_data, file)
+            elif user_answer and user_answer != data['right_answer']:
+                kwargs['wrong'] = True
+                return flask.render_template("course_page.html", **kwargs)
+            data, kwargs = get_kwargs()
+            return flask.render_template("course_page.html", **kwargs)
