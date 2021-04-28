@@ -44,9 +44,11 @@
 		</div>
 	</div>
 </div>
-<div class="container">
+<hr/>
+<div class="container mt-3">
+	<h1 style="font-size: 2.5rem; font-weight: 300;">Текущие курсы</h1><br/>
 	{% for course in courses %}
-        <div class="col-sm-6 mt-4">
+        <div class="col-sm-6">
             <a href="/courses/{{ course.name }}" class="becode-a">
                 <div class="course-block pt-3 mb-2 mx-2 my-1">
                     <img src="{{ url_for('static', filename='images/courses/{0}'.format(course.name + '.png')) }}" alt="error" size="100" height="100" width="100">
