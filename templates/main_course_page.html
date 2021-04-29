@@ -2,12 +2,12 @@
 
 {% block content %}
     <div class="container mt-5">
-        {% for lesson in topic.get() %}
-                <div class="col-sm-12" style="background-image: linear-gradient(to right, rgb(0 255 37 / 14%) {{ passed[lesson] }}%, rgba(255, 255, 255, 0) {{ passed[lesson] }}%)">
-                    <a href="/courses/{{ postfix.lower() }}/{{ lesson.lower().split('.')[0] }}/1" class="becode-a">
+        {% for lesson in topic %}
+                <div class="col-sm-12" style="background-image: linear-gradient(to right, rgb(0 255 37 / 14%) {{ get_per_cent_of_passed_lessons(lesson['id']) }}%, rgba(255, 255, 255, 0) {{ get_per_cent_of_passed_lessons(lesson['id']) }}%)">
+                    <a href="/courses/{{ postfix.lower() }}/{{ lesson['id'] }}/{{ first_theme_id(lesson['id']) }}" class="becode-a">
                         <div class="row becode-list my-3">
-                            <div class="col-sm-11 text-left">{{ lesson }}</div>
-                            <div class="col-sm-1 becode-shadow pt-1">{{ topic.len(lesson) }}</div>
+                            <div class="col-sm-11 text-left">{{ lesson['name'] }}</div>
+                            <div class="col-sm-1 becode-shadow pt-1">{{ get_theme_length(lesson['id']) }}</div>
                         </div>
                     </a>
                 </div>

@@ -1,23 +1,21 @@
-from classes.courses import Courses
-import json
-import os
+import sqlalchemy
+from data.db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
 
 
-class Lesson:
-    def __init__(self, name):
-        self.name = name
+class Lesson(SqlAlchemyBase, SerializerMixin, UserMixin):
+    __tablename__ = 'lesson'
 
-    def get(self):
-        return list(os.walk(f"courses/{self.name}"))[0][1]
+    id = sqlalchemy.Column(sqlalchemy.Integer,
+                           primary_key=True, autoincrement=True)
+    theme_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    topic = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    context = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    question_type = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    question = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    answers = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    task = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    right_answer = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    passed = sqlalchemy.Column(sqlalchemy.String, default='0')
 
-    def list(self, lname):
-        return list(os.walk(f"courses/{self.name}/{lname}"))[0][2]
-
-    def len(self, lname):
-        return len(list(os.walk(f"courses/{self.name}/{lname}"))[0][2])
-
-    @staticmethod
-    def passed_part(name, lesson, part, user_id):
-        with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
-            data = json.loads(file.read())
-        return user_id in data['passed']

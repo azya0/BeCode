@@ -1,12 +1,12 @@
 import sqlalchemy
 from data.db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
 
 
-class Course(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = 'courses'
+class Lang(SqlAlchemyBase, SerializerMixin, UserMixin):
+    __tablename__ = 'lang'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String)
-    folder = sqlalchemy.Column(sqlalchemy.String)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)

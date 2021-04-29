@@ -1,8 +1,9 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required
-from classes.courses import Courses
-from classes.course import Course
 from classes.lesson import Lesson
+from classes.theme import Theme
+from classes.lang import Lang
 from classes.user import User
+from data import db_session
 import sqlite3
 import flask
 import json
@@ -34,8 +35,11 @@ def top():
 @blueprint.route('/courses/', methods=['GET'])
 @login_required
 def courses():
+    db_sess = db_session.create_session()
+    langs = db_sess.query(Lang).all()
+    data = [elm.to_dict()['name'] for elm in langs]
     return flask.render_template("courses.html", title='BeCode: Courses', postfix='Courses', user=current_user,
-                                 courses=Courses())
+                                 courses=data)
 
 
 @blueprint.route('/profile', methods=['GET', 'POST'])
@@ -48,74 +52,84 @@ def profile():
 @blueprint.route('/courses/<string:name>', methods=['GET'])
 @login_required
 def lesson(name: str):
-    try:
-        Lesson(name.lower()).get()
-    except IndexError:
-        flask.abort(404)
-    data = {
-        j: [Lesson.passed_part(name, int(j.split('.')[0]), i, current_user.id) for i in
-         range(1, len(Lesson(name.lower()).list(Lesson(name.lower()).get()[int(j.split('.')[0]) - 1])) + 1)]
-        for j in Lesson(name.lower()).get()
-    }
-    data = {i: round(data[i].count(True) / len(data[i]) * 100) for i in data}
+    def get_theme_length(theme_id):
+        db_sess_new = db_session.create_session()
+        lessons = [elm.to_dict() for elm in db_sess_new.query(Lesson).filter(Lesson.theme_id == theme_id)]
+        return len(lessons)
+
+    def first_theme_id(theme_id):
+        db_sess_new = db_session.create_session()
+        lessons = [elm.to_dict() for elm in db_sess_new.query(Lesson).filter(Lesson.theme_id == theme_id)]
+        first_lesson = lessons[0]
+        return first_lesson['id']
+
+    def get_per_cent_of_passed_lessons(theme_id):
+        db_sess_new = db_session.create_session()
+        lessons = [elm.to_dict() for elm in db_sess_new.query(Lesson).filter(Lesson.theme_id == theme_id)]
+        new_data = list(map(lambda x: str(current_user.id) in x['passed'], lessons))
+        return round(new_data.count(True) / len(new_data) * 100)
+
+    db_sess = db_session.create_session()
+    themes = db_sess.query(Theme).all()
+    topic = [elm.to_dict() for elm in themes]
     return flask.render_template("main_course_page.html", title=f'BeCode: {name.capitalize()}',
-                                 postfix=name.capitalize(), user=current_user, topic=Lesson(name.lower()),
-                                 passed=data)
+                                 postfix=name.capitalize(), user=current_user, topic=topic,
+                                 get_theme_length=get_theme_length, first_theme_id=first_theme_id,
+                                 get_per_cent_of_passed_lessons=get_per_cent_of_passed_lessons)
 
 
-@blueprint.route('/courses/<string:name>/<int:lesson>/<int:part>', methods=['GET', 'POST'])
+@blueprint.route('/courses/<string:name>/<int:theme_id>/<int:id>', methods=['GET', 'POST'])
 @login_required
-def part(name: str, lesson: int, part: int):
+def part(name: str, theme_id: int, id: int):
+    def is_lennon_passed(lesson_id):
+        db_sess = db_session.create_session()
+        parts = db_sess.query(Lesson).filter(Lesson.id == lesson_id)
+        current_lesson = [elm.to_dict() for elm in parts][0]
+        return str(current_user.id) in current_lesson['passed'].split(',')
+
     def get_kwargs(**add):
         global data, kwargs
-        with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
-            data = json.loads(file.read())
-        current_lesson = Lesson(name.lower())
+        db_sess = db_session.create_session()
+        parts = db_sess.query(Lesson).filter(Lesson.theme_id == theme_id)
+        lessons = [elm.to_dict() for elm in parts]
+        current_lesson = list(filter(lambda x: x['id'] == id, lessons))[0]
+        passed_lesson = [elm["id"] for elm in lessons if is_lennon_passed(int(elm['id']))]
         kwargs = {'title': f'BeCode: {name.capitalize()}',
                   'postfix': name.capitalize(),
-                  'topic': Lesson(name.lower()),
-                  'lesson': lesson,
-                  'data': data,
+                  'lesson': theme_id,
+                  'data': current_lesson,
                   'user': current_user,
-                  'passed': current_user.id in data['passed'],
-                  'part': len(current_lesson.list(current_lesson.get()[lesson - 1])),
-                  'cur_part': part,
-                  'passed_parts': [Lesson.passed_part(name, lesson, i, current_user.id) for i in range(1, len(current_lesson.list(current_lesson.get()[lesson - 1])) + 1)],
+                  'passed': is_lennon_passed(int(current_lesson['id'])),
+                  'part': lessons,
+                  'cur_part': id,
+                  'passed_parts': passed_lesson,
+                  'questions': list(map(str.strip, current_lesson['answers'].split(','))) if current_lesson['answers'] else '',
                   'wrong_answer': '',
                   'wrong': False,
                   **add}
-        return data, kwargs
+        return current_lesson, kwargs
 
     data, kwargs = get_kwargs()
     if flask.request.method == 'GET':
         return flask.render_template("course_page.html", **kwargs)
     elif flask.request.method == 'POST':
-        print(current_user.courses.split(", "))
-        print(name)
         if name not in current_user.courses.split(", "):
             session = db_session.create_session()
             curr = session.query(User).get(current_user.id)
             curr.courses = ", ".join([i for i in curr.courses.split(", ") + [name] if i.strip() != ''])
             session.commit()
-        if data['type'] == 'question':
+        if data['question_type'] == 'question':
             user_answer = flask.request.form.getlist('answer')
             if user_answer and user_answer[0] == data['right_answer']:
-                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
-                    new_data = json.loads(file.read())
-                    if current_user.id not in new_data['passed']:
-                        new_data['passed'] += [current_user.id]
-                        con = sqlite3.connect("db/users.db")
-                        cur = con.cursor()
-                        cur.execute(f'''
-                        UPDATE users
-                        SET score = score + 1
-                        WHERE id = {current_user.id}
-                        ''')
-                        con.commit()
-                        con.close()
-                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
-                          'w') as file:
-                    json.dump(new_data, file)
+                if not is_lennon_passed(id):
+                    db_sess = db_session.create_session()
+                    lesson = db_sess.query(Lesson).get(id)
+                    lesson.passed += ',' + str(current_user.id)
+                    db_sess.commit()
+                    session = db_session.create_session()
+                    curr = session.query(User).get(current_user.id)
+                    curr.score += 1
+                    session.commit()
             elif user_answer and user_answer[0] != data['right_answer']:
                 kwargs['wrong_answer'] = user_answer[0]
                 return flask.render_template("course_page.html", **kwargs)
@@ -126,22 +140,15 @@ def part(name: str, lesson: int, part: int):
         else:
             user_answer = flask.request.form.get('answer')
             if user_answer and user_answer == data['right_answer']:
-                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json') as file:
-                    new_data = json.loads(file.read())
-                    if current_user.id not in new_data['passed']:
-                        new_data['passed'] += [current_user.id]
-                        con = sqlite3.connect("db/users.db")
-                        cur = con.cursor()
-                        cur.execute(f'''
-                        UPDATE users
-                        SET score = score + 1
-                        WHERE id = {current_user.id}
-                        ''')
-                        con.commit()
-                        con.close()
-                with open(f'courses/{name.lower()}/{Courses().get_list_of_courses(name)[lesson - 1]}/{part}.json',
-                          'w') as file:
-                    json.dump(new_data, file)
+                if not is_lennon_passed(id):
+                    db_sess = db_session.create_session()
+                    lesson = db_sess.query(Lesson).get(id)
+                    lesson.passed += ',' + str(current_user.id)
+                    db_sess.commit()
+                    session = db_session.create_session()
+                    curr = session.query(User).get(current_user.id)
+                    curr.score += 1
+                    session.commit()
             elif user_answer and user_answer != data['right_answer']:
                 kwargs['wrong'] = True
                 return flask.render_template("course_page.html", **kwargs)

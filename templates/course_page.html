@@ -2,24 +2,23 @@
 
 {% block content %}
     <div class="container row mt-3 justify-content-center">
-        {% for elm in range(part) %}
-            <a href="{{ elm + 1 }}" class="col-sm-1 {% if elm + 1 == cur_part %} becode-current-part-block {% endif %} {% if passed_parts[elm] %} becode-passed-part-block {% endif %} becode-part-block mx-3 my-2"></a>
+        {% for elm in part %}
+            <a href="{{ elm['id'] }}" class="col-sm-1 {% if elm['id'] == cur_part %} becode-current-part-block {% endif %} {% if elm['id'] in passed_parts %} becode-passed-part-block {% endif %} becode-part-block mx-3 my-2"></a>
         {% endfor %}
     </div>
     <div class="mt-5 container">
         <div class="becode-content">
-        <h1>{{ data['topic_name'] }}</h1>
-        <h2>{{ data['name'] }}</h2>
+        <h1 class="mt-2">{{ data['topic'] }}</h1>
         <div class="mt-5 becode-content-small">
             <p class="mx-2">{{ data['context'] }}</p>
         </div>
         </div>
         <div class="my-5 py-3 px-3 becode-content {% if passed %} becode-content-passed {% endif %}">
-            <h2>{{ data['questions'] }}</h2>
-            {% if data['type'] == 'question' %}
+            <h2>{{ data['question'] }}</h2>
+            {% if data['question_type'] == 'question' %}
             <form action="" method="post" novalidate>
                 <div class="btn-group btn-group-toggle row becode-display" data-toggle="buttons">
-                    {% for answer in data['answers'] %}
+                    {% for answer in questions %}
                   <label class="my-2 mx-5 btn {% if not passed %} btn-secondary {% endif %} becode-btn becode-font col-sm-12 {% if passed and answer == data['right_answer'] %} becode-btn-passed {% endif %} {% if answer == wrong_answer %} becode-btn-wrong {% endif %}">
                     <input type="radio" name="answer" value="{{ answer }}"> {{ answer }}
                   </label>
@@ -31,7 +30,7 @@
                     {% endif %}
                 </div>
             </form>
-            {% elif data['type'] == 'label' %}
+            {% elif data['question_type'] == 'label' %}
                 <div class="mx-5 py-2 becode-code">{{ data['task'] }}</div>
                 <form action="" method="post" novalidate>
                         <div class="row mt-5">
