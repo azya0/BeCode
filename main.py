@@ -12,6 +12,7 @@ from data import db_session
 import sqlite3
 import flask
 import json
+import os
 
 
 app = Flask(__name__, static_folder="static", template_folder='templates')
@@ -244,7 +245,7 @@ def internal_server_error(error):
 
 def main():
     db_session.global_init("db/courses.db")
-    app.run()
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
 
 if __name__ == '__main__':
