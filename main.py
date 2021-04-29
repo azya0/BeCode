@@ -1,6 +1,7 @@
 from flask_login import login_user, logout_user, current_user, LoginManager, login_required, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from form.registration import RegistrationForm
+from flask import Flask, render_template
 from werkzeug.utils import redirect
 from classes.lesson import Lesson
 from form.login import LoginForm
@@ -243,8 +244,6 @@ def internal_server_error(error):
 
 def main():
     db_session.global_init("db/courses.db")
-    app.register_blueprint(main_page.blueprint)
-    app.register_blueprint(sign.blueprint)
     app.run()
 
 
