@@ -4,9 +4,8 @@ from classes.user import User
 from data import db_session
 from pages import main_page, sign
 
-
 app = Flask(__name__, static_folder="static")
-app.config['SECRET_KEY'] = '#1000-7?vrDEFG22WEwefgRSDGf1243_zxc?'
+app.config['SECRET_KEY'] = '#1000-7?vrDEFG22WEwefgRSDGf1243_zxc?'  # cursed
 app.config["UPLOAD_FOLDER"] = "static/images"
 login_manager = LoginManager()
 login_manager.init_app(app)
