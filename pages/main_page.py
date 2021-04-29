@@ -71,7 +71,7 @@ def lesson(name: str):
 
     db_sess = db_session.create_session()
     themes = db_sess.query(Theme).all()
-    topic = [elm.to_dict() for elm in themes]
+    topic = sorted([elm.to_dict() for elm in themes], key=lambda x: int(x['id']))
     return flask.render_template("main_course_page.html", title=f'BeCode: {name.capitalize()}',
                                  postfix=name.capitalize(), user=current_user, topic=topic,
                                  get_theme_length=get_theme_length, first_theme_id=first_theme_id,
@@ -93,6 +93,8 @@ def part(name: str, theme_id: int, id: int):
         parts = db_sess.query(Lesson).filter(Lesson.theme_id == theme_id)
         lessons = [elm.to_dict() for elm in parts]
         current_lesson = list(filter(lambda x: x['id'] == id, lessons))[0]
+        if current_lesson['task']:
+            current_lesson['task'] = list(map(lambda x: x.strip(), current_lesson['task'].split('\\n')))
         passed_lesson = [elm["id"] for elm in lessons if is_lennon_passed(int(elm['id']))]
         kwargs = {'title': f'BeCode: {name.capitalize()}',
                   'postfix': name.capitalize(),

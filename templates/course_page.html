@@ -31,7 +31,11 @@
                 </div>
             </form>
             {% elif data['question_type'] == 'label' %}
-                <div class="mx-5 py-2 becode-code">{{ data['task'] }}</div>
+            {% if data['task'] %}
+                {% for elm in data['task'] %}
+                    <div class="mx-5 py-2 becode-code text-left pl-2">{{ data['task'].index(elm) + 1 }}. {{ elm }}</div>
+                {% endfor %}
+            {% endif %}
                 <form action="" method="post" novalidate>
                         <div class="row mt-5">
                             {% if not passed %}
