@@ -70,7 +70,9 @@ def lesson(name: str):
         return round(new_data.count(True) / len(new_data) * 100)
 
     db_sess = db_session.create_session()
-    themes = db_sess.query(Theme).all()
+    lang_id = db_sess.query(Lang).filter(Lang.name == name.lower())
+    lang_id = [elm.to_dict() for elm in lang_id][0]['id']
+    themes = db_sess.query(Theme).filter(Theme.lang_id == lang_id)
     topic = sorted([elm.to_dict() for elm in themes], key=lambda x: int(x['id']))
     return flask.render_template("main_course_page.html", title=f'BeCode: {name.capitalize()}',
                                  postfix=name.capitalize(), user=current_user, topic=topic,
