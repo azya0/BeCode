@@ -29,7 +29,6 @@ def internal_server_error(error):
 
 
 def main():
-    db_session.global_init("db/users.db")
     db_session.global_init("db/courses.db")
     app.register_blueprint(main_page.blueprint)
     app.register_blueprint(sign.blueprint)

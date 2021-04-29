@@ -24,7 +24,7 @@ def register():
         return redirect('/')
     form = RegistrationForm()
     if form.validate_on_submit():
-        con = sqlite3.connect('db/users.db')
+        con = sqlite3.connect('db/courses.db')
         cur = con.cursor()
         if form.username.data in map(lambda x: x[0], cur.execute('''SELECT login FROM users''').fetchall()):
             return flask.render_template('signup.html', title='BeCode: SignUp',
